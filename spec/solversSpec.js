@@ -33,6 +33,17 @@ describe('solvers', function() {
 
   });
 
+  /*
+    [1]
+
+    [1][0]    [0][1]
+    [0][1]    [1][0]
+
+    [1][0][0]  [1][0][0]
+    [0][1][0]         [0][0][1]    
+    [0][0][1]     [0][1][0]
+  */
+
   describe('findNQueensSolution()', function() {
 
     it('finds a valid solution for n of 0-7', function() {

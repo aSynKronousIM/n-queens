@@ -161,18 +161,36 @@ window.findNQueensSolution = function(n) {
 
 //return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = 0; 
+  var solutionCount = 0;
 
+  var matrixDeepCopy = function(matrix){
+    var newMatrix = [];
+    for(var i = 0;i<matrix.length;i++){
+      var newRow = [];
+      for(var j = 0;j<matrix[i].length;j++){
+        newRow[j] = matrix[i][j];
+      }
+      newMatrix[i] = newRow;
+    }
+    return newMatrix;
+  } 
+  
   var recursion = function(rowsRemaining,solutionsSoFar){
 // base case: rowsRemaining == 0; return solutionsSoFar
 // else:
   // for each of the solutions so far
     // iterate across the current row, and test adding a queen to each space
       // if adding the queen does not produce errors, push this to currentSolutions
-    // return current solutions 
-
+    // return current solutions
+    var str;
+    var str2; 
+    // if(solutionsSoFar){
+    //   debugger;
+    //   str = JSON.stringify(solutionsSoFar[0].rows());
+    //   debugger;
+    // }
     var solutionsSoFar = solutionsSoFar || [new Board({n: n})];
-  
+    
     if(rowsRemaining === 0){
       return solutionsSoFar;
     } else {
@@ -180,22 +198,31 @@ window.countNQueensSolutions = function(n) {
       for (var i = 0; i < solutionsSoFar.length; i++) {
         var pSolutions = new Board(solutionsSoFar[i].rows());
         for (var j = 0; j < n; j++) {
+          
           pSolutions.togglePiece(n-rowsRemaining, j);
+          str2 = JSON.stringify(pSolutions.rows());
           if (!pSolutions.hasAnyQueensConflicts()) {
-            var str = JSON.stringify(pSolutions.rows());
+            
+            var psCopy = matrixDeepCopy(pSolutions.rows());
+            str = JSON.stringify(psCopy);
             debugger;
-            currentSolutions.push(new Board(pSolutions.rows()));
-            str = JSON.stringify(currentSolutions[0].rows());
-            debugger;
+            currentSolutions.push(new Board(psCopy));
           }
+          // str = JSON.stringify(currentSolutions[0].rows());
+          // debugger;
           pSolutions.togglePiece(n-rowsRemaining, j);
+          // str2 = JSON.stringify(currentSolutions[0].rows());
+          // debugger;
         }
+      }
+      if(currentSolutions[0]){
+        str2 = JSON.stringify(currentSolutions[0].rows());
+        debugger;
       }
       return recursion(rowsRemaining - 1, currentSolutions);
     }
   };
   solutionCount = recursion(n).length;
-  debugger;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
